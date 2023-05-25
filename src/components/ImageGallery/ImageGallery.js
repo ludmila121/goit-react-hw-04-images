@@ -1,24 +1,20 @@
-import { React } from 'react';
+import  React  from 'react';
 import PropTypes from 'prop-types';
+import {GalleryList} from '../ImageGallery/ImageGallery.styled';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-import s from './ImageGallery.module.css';
 
 const ImageGallery = ({ images, onOpenModal }) => (
-  <ul className={s.ImageGallery}>
+  <GalleryList>
     {images.map(image => {
-      const { id, webformatURL, tags, largeImageURL } = image;
-      return (
-        <ImageGalleryItem
+      const { id, webformatURL, tags } = image;
+      return <ImageGalleryItem
           key={id}
           src={webformatURL}
           alt={tags}
           id={id}
-          onOpenModal={onOpenModal}
-          largeImageURL={largeImageURL}
-        />
-      );
+          onOpenModal={onOpenModal} />
     })}
-  </ul>
+  </GalleryList>
 );
 
 ImageGallery.propTypes = {
@@ -28,7 +24,7 @@ ImageGallery.propTypes = {
       webformatURL: PropTypes.string.isRequired,
       tags: PropTypes.string.isRequired,
     })
-  ),
+  )
 };
 
 export default ImageGallery;

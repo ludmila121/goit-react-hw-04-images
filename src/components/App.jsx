@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
-import { GlobalStyle } from './GlobalStyle';
 import { AppContainer } from './App.styled';
 import 'react-toastify/dist/ReactToastify.css';
-import Searchbar from './Searchbar';
-import ImageGallery from './ImageGallery';
-import api, { countTotalResults }  from '../services/api-service';
-import Button from './Button';
-import Modal from './Modal';
-import Loader from './Loader/Loader.js';
-
+import ImageGallery from './ImageGallery/ImageGallery';
+import api, { countTotalResults }  from '../services/api-services';
+import Button from './Button/Button';
+import Modal from './Modal/Modal';
+import Loader from './Loader/Loader';
+import Searchbar from './Searchbar/Searchbar';
+import 'index.css'
 
 export default function App () {
    
@@ -51,39 +50,37 @@ useEffect(() => {
 
   
 const handleFormSubmit = newSearchName => {
-    if (newSearchName === searchName) return;
-    
-      setSearchName (newSearchName);
-      setPage (1),
-      setImages([]);
-      setIsModalOpen (false);
-      setIsLoading (true);
-    };
-
- 
-    const onLoadMore = () => {
-    setPage(prev => prev + 1);
-    setIsLoading(true);
-  };
-
+  if (newSearchName === searchName) return;
   
-  const onOpenModal = id => {
-    setIsModalOpen (true);
-      setLargeImage(images.find(image => image.id ===id).largeImageURL);
-      setAlt(images.find(image => image.id === id).tags);
-    };
+  setSearchName(newSearchName);
+  setPage(1);
+  setImages([]);
+  setIsModalOpen(false);
+  setIsLoading(true);
+};
 
-  const onCloseModal = () => setIsModalOpen(false);
 
-    return (
-      <AppContainer>
-        <Searchbar onSubmit={handleFormSubmit}  images ={images}/>
-        {images.length > 0 && <ImageGallery images={images} onOpenModal={onOpenModal} />}
-        {isLoading ? (<Loader />):(!isLastPage.current && <Button onClick={onLoadMore} />)}
-        {isModalOpen && <Modal largeImageURL={largeImage}
-            alt={alt} onCloseModal={onCloseModal}
-          />}
-        <ToastContainer autoClose={3000} />
-      </AppContainer>
-    );
-  }
+const onLoadMore = () => {
+  setPage(prev => prev + 1);
+  setIsLoading(true);
+};
+
+
+const onOpenModal = id => {
+  setIsModalOpen(true);
+  setLargeImage(images.find(image => image.id === id).largeImageURL);
+  setAlt(images.find(image => image.id === id).tags);
+};
+
+const onCloseModal = () => setIsModalOpen(false);
+
+return (
+  <AppContainer>
+    <Searchbar onSubmit={handleFormSubmit} images={images} />
+    {images.length > 0 && <ImageGallery images={images} onOpenModal={onOpenModal}/>}
+    {isLoading ? (<Loader />) : (!isLastPage.current && <Button onClick={onLoadMore} />)}
+    {isModalOpen && <Modal largeImageURL={largeImage} alt={alt} onCloseModal={onCloseModal} />}
+    <ToastContainer autoClose={3000} />
+  </AppContainer>
+);
+}
