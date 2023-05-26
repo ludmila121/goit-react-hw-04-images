@@ -18,7 +18,7 @@ const  Searchbar = ({ onSubmit}) => {
         toast.error('Sorry, there are no images matching your search query. Please try again.');
         return;
       }
-      onSubmit(this.state.searchName);
+      onSubmit(searchName);
       setSearchName('');
       };
 

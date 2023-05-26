@@ -16,7 +16,7 @@ export default function App () {
   const[images, setImages] = useState([]);
    const[largeImage, setLargeImage]= useState ('');
    const [alt, setAlt] = useState('');
-   const[searchName, setSearchName] =('');
+   const[searchName, setSearchName] = useState('');
     const[page, setPage] = useState(1);
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
