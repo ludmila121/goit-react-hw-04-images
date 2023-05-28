@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import { AppContainer } from './App.styled';
@@ -20,11 +20,10 @@ export default function App () {
     const[page, setPage] = useState(1);
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
-   
-   const isLastPage = useRef(true);
+   const [showBtn,setShowBtn] = useState(false);
 
 useEffect(() => {
-  if (!searchName || !page) 
+  if (!searchName) 
   return;
 
   (async function fetchImg() {
@@ -33,18 +32,16 @@ useEffect(() => {
       const data = await api.getImages(searchName, page);
       if (!data.hits.length){
         toast.error('Sorry, there are no images matching your search query. Please try again.');
-        isLastPage.current = true;
-        setIsLoading(false);
         return
       }
-      isLastPage.current = countTotalResults(page) >= data.totalHits;
-      setImages(p => [...p, ...data.hits]);
+      setShowBtn.current = setPage < Math.ceil(countTotalResults/ 12);
+      setImages(pic => [...pic, ...data.hits]);
       setIsLoading(false);
     } catch (error){
       console.log(error);
       toast.error('Sorry, there are no images matching your search query. Please try again.');
-    }
-  })();
+    } finally  {setIsModalOpen(false)};
+  });
 }, [searchName, page]);
   
 
@@ -55,8 +52,7 @@ const handleFormSubmit = newSearchName => {
   setSearchName(newSearchName);
   setPage(1);
   setImages([]);
-  setIsModalOpen(false);
-  setIsLoading(true);
+  
 };
 
 
@@ -68,8 +64,8 @@ const onLoadMore = () => {
 
 const onOpenModal = id => {
   setIsModalOpen(true);
-  setLargeImage(images.find(image => image.id === id).largeImageURL);
-  setAlt(images.find(image => image.id === id).tags);
+  //setLargeImage(images.find(image => image.id === id).largeImageURL);
+  //setAlt(images.find(image => image.id === id).tags);
 };
 
 const onCloseModal = () => setIsModalOpen(false);
@@ -78,7 +74,7 @@ return (
   <AppContainer>
     <Searchbar onSubmit={handleFormSubmit} images={images} />
     {images.length > 0 && <ImageGallery images={images} onOpenModal={onOpenModal}/>}
-    {isLoading ? (<Loader />) : (!isLastPage.current && <Button onClick={onLoadMore} />)}
+    {isLoading ? (<Loader />) : (!setShowBtn.current && <Button onClick={onLoadMore} />)}
     {isModalOpen && <Modal largeImageURL={largeImage} alt={alt} onCloseModal={onCloseModal} />}
     <ToastContainer autoClose={3000} />
   </AppContainer>
