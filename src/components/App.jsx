@@ -41,7 +41,7 @@ useEffect(() => {
       console.log(error);
       toast.error('Sorry, there are no images matching your search query. Please try again.');
     } finally  {setIsModalOpen(false)};
-  });
+  })();
 }, [searchName, page]);
   
 
