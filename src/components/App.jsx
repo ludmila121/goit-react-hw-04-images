@@ -22,27 +22,28 @@ export default function App () {
    const [isLoading, setIsLoading] = useState(false);
    const [showBtn,setShowBtn] = useState(false);
 
-useEffect(() => {
-  if (!searchName) 
-  return;
-
-  (async function fetchImg() {
-    setIsLoading(true);
-    try{
-      const data = await api.getImages(searchName, page);
-      if (!data.hits.length){
+   useEffect(() => {
+    if (!searchName) 
+    return;
+  
+    async function fetchImg() {
+      setIsLoading(true);
+      try{
+        const data = await api.getImages(searchName, page);
+        if (!data.hits.length){
+          toast.error('Sorry, there are no images matching your search query. Please try again.');
+          return
+        }
+        setShowBtn.current = setPage < Math.ceil(countTotalResults/ 12);
+        setImages(pic => [...pic, ...data.hits]);
+        setIsLoading(false);
+      } catch (error){
+        console.log(error);
         toast.error('Sorry, there are no images matching your search query. Please try again.');
-        return
-      }
-      setShowBtn.current = setPage < Math.ceil(countTotalResults/ 12);
-      setImages(pic => [...pic, ...data.hits]);
-      setIsLoading(false);
-    } catch (error){
-      console.log(error);
-      toast.error('Sorry, there are no images matching your search query. Please try again.');
-    } finally  {setIsModalOpen(false)};
-  })();
-}, [searchName, page]);
+      } finally  {setIsModalOpen(false)};
+    }
+  fetchImg()
+  }, [searchName, page]);
   
 
   
@@ -74,7 +75,7 @@ return (
   <AppContainer>
     <Searchbar onSubmit={handleFormSubmit} images={images} />
     {images.length > 0 && <ImageGallery images={images} onOpenModal={onOpenModal}/>}
-    {isLoading ? (<Loader />) : (!setShowBtn.current && <Button onClick={onLoadMore} />)}
+     {isLoading ? (<Loader />) : (!setShowBtn.current && <Button onClick={onLoadMore} />)} 
     {isModalOpen && <Modal largeImageURL={largeImage} alt={alt} onCloseModal={onCloseModal} />}
     <ToastContainer autoClose={3000} />
   </AppContainer>
