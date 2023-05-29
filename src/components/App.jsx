@@ -53,7 +53,7 @@ const handleFormSubmit = newSearchName => {
   setSearchName(newSearchName);
   setPage(1);
   setImages([]);
-  
+  setShowBtn(true);
 };
 
 
@@ -62,7 +62,7 @@ const onLoadMore = () => {
 };
 
 
-const onOpenModal = () => {
+const onOpenModal = (largeImageURL, alt ) => {
   setIsModalOpen(true);
   setLargeImage(largeImageURL);
   setAlt(alt);
@@ -75,7 +75,7 @@ return (
     <Searchbar onSubmit={handleFormSubmit} images={images} />
     {images.length > 0 && <ImageGallery images={images} onOpenModal={onOpenModal}/>}
      {isLoading && <Loader />} 
-   {!Button.current && <Button onClick={onLoadMore} />}  
+   {showBtn && <Button onClick={onLoadMore} />}  
     {isModalOpen && <Modal largeImageURL={largeImage} alt={alt} onCloseModal={onCloseModal} />}
     <ToastContainer autoClose={3000} />
   </AppContainer>

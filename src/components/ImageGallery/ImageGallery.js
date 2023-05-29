@@ -6,12 +6,13 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 const ImageGallery = ({ images, onOpenModal }) => (
   <GalleryList>
     {images.map(image => {
-      const { id, webformatURL, tags } = image;
+      const { id, webformatURL, largeImageURL, tags } = image;
       return <ImageGalleryItem
           key={id}
           src={webformatURL}
           alt={tags}
           id={id}
+          largeImageURL={largeImageURL}
           onOpenModal={onOpenModal} />
     })}
   </GalleryList>
