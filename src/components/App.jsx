@@ -13,11 +13,11 @@ import 'index.css'
 
 export default function App () {
    
+  const[page, setPage] = useState(1);
+  const[searchName, setSearchName] = useState('');
   const[images, setImages] = useState([]);
    const[largeImage, setLargeImage]= useState ('');
    const [alt, setAlt] = useState('');
-   const[searchName, setSearchName] = useState('');
-    const[page, setPage] = useState(1);
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const [showBtn,setShowBtn] = useState(false);
@@ -59,14 +59,13 @@ const handleFormSubmit = newSearchName => {
 
 const onLoadMore = () => {
   setPage(prev => prev + 1);
-  setIsLoading(true);
 };
 
 
-const onOpenModal = id => {
+const onOpenModal = () => {
   setIsModalOpen(true);
-  //setLargeImage(images.find(image => image.id === id).largeImageURL);
-  //setAlt(images.find(image => image.id === id).tags);
+  setLargeImage(largeImageURL);
+  setAlt(alt);
 };
 
 const onCloseModal = () => setIsModalOpen(false);
@@ -75,7 +74,8 @@ return (
   <AppContainer>
     <Searchbar onSubmit={handleFormSubmit} images={images} />
     {images.length > 0 && <ImageGallery images={images} onOpenModal={onOpenModal}/>}
-     {isLoading ? (<Loader />) : (!setShowBtn.current && <Button onClick={onLoadMore} />)} 
+     {isLoading && <Loader />} 
+   {!Button.current && <Button onClick={onLoadMore} />}  
     {isModalOpen && <Modal largeImageURL={largeImage} alt={alt} onCloseModal={onCloseModal} />}
     <ToastContainer autoClose={3000} />
   </AppContainer>
