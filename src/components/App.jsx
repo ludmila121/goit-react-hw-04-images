@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { AppContainer } from './App.styled';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from './ImageGallery/ImageGallery';
-import api, { countTotalResults }  from '../services/api-services';
+import api  from '../services/api-services';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import Loader from './Loader/Loader';
@@ -34,7 +34,7 @@ export default function App () {
           toast.error('Sorry, there are no images matching your search query. Please try again.');
           return
         }
-        setShowBtn.current = setPage < Math.ceil(countTotalResults/ 12);
+        setShowBtn(page < Math.ceil(data.totalHits/ 12));
         setImages(pic => [...pic, ...data.hits]);
         setIsLoading(false);
       } catch (error){

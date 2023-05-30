@@ -12,7 +12,6 @@ const getImages = async (searchName, page) => {
   return response.data;
 };
 
-export const countTotalResults = page => page * PER_PAGE;
 
 const api = {
   getImages,
